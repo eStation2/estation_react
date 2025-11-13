@@ -1,0 +1,76 @@
+# Build dependencies (must be first)
+setuptools>=69.0.0
+wheel>=0.42.0
+Cython>=3.0.0
+
+# Web Framework
+fastapi[all]==0.104.1
+uvicorn[standard]==0.24.0
+gunicorn==21.2.0
+
+# Database & ORM
+sqlalchemy[asyncio]==2.0.23
+alembic==1.12.1
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+
+# Redis & Caching (compatible with celery requirements)
+redis[hiredis]>=4.5.2,<5.0.0
+aioredis==2.0.1
+
+# Task Queue
+celery[redis]==5.3.4
+flower==2.0.1
+
+# Data Processing (install numpy first for other packages)
+numpy>=1.26.0,<2.0.0
+pandas>=2.1.4,<3.0.0
+scipy>=1.11.4,<2.0.0
+
+# Geospatial Libraries (require numpy and must match system GDAL version 3.6.2)
+GDAL==3.6.2
+Fiona>=1.8.0,<1.10.0
+Shapely>=1.8.0,<3.0.0
+rasterio>=1.2.0,<1.4.0
+geopandas>=0.12.0,<1.0.0
+pyproj>=3.4.0,<4.0.0
+
+# Authentication & Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.6
+
+# WebSocket Support
+python-socketio==5.10.0
+websockets==12.0
+
+# HTTP Client
+httpx==0.25.2
+aiohttp==3.9.1
+
+# Validation & Serialization
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Environment & Configuration
+python-dotenv==1.0.0
+dynaconf==3.2.4
+
+# Monitoring & Logging
+prometheus-client==0.19.0
+structlog==23.2.0
+
+# Date & Time
+python-dateutil==2.8.2
+pytz==2023.3
+
+# File Processing
+Pillow==10.1.0
+python-magic==0.4.27
+
+# Development Dependencies (will be in requirements-dev.txt)
+# pytest==7.4.3
+# pytest-asyncio==0.21.1
+# black==23.11.0
+# flake8==6.1.0
+# mypy==1.7.1

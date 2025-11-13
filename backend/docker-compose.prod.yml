@@ -1,0 +1,111 @@
+# Production override for docker-compose.yml
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up
+
+services:
+  backend:
+    build:
+      target: production
+    environment:
+      - DEBUG=false
+      - API_WORKERS=4
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 1G
+          cpus: '1.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    restart: always
+
+  celery-worker:
+    build:
+      target: production
+    environment:
+      - DEBUG=false
+    command: ["celery", "-A", "app.celery", "worker", "--loglevel=info", "--concurrency=4", "--max-tasks-per-child=1000"]
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '1.0'
+    restart: always
+
+  celery-beat:
+    build:
+      target: production
+    environment:
+      - DEBUG=false
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+          cpus: '0.25'
+    restart: always
+
+  postgres:
+    environment:
+      - POSTGRES_LOG_STATEMENT=none
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 1G
+          cpus: '1.0'
+    restart: always
+    # Add backup volume for production
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_backups:/backups
+
+  redis:
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD} --maxmemory 512mb --maxmemory-policy allkeys-lru
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+    restart: always
+
+  geoserver:
+    environment:
+      - INITIAL_MEMORY=2G
+      - MAXIMUM_MEMORY=4G
+      - GEOSERVER_LOG_LEVEL=WARN
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 2G
+          cpus: '1.0'
+    restart: always
+
+  nginx:
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+          cpus: '0.25'
+    restart: always
+
+volumes:
+  postgres_backups:
+    driver: local
