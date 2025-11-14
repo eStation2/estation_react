@@ -11,7 +11,7 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Project paths
-PROJECT_ROOT="/Users/Jurvtk/Develop/new_estation"
+PROJECT_ROOT=""
 FRONTEND_DIR="$PROJECT_ROOT/frontend"
 LOG_FILE="$PROJECT_ROOT/app.log"
 
